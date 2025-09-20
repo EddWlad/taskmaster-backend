@@ -41,7 +41,6 @@ public class UserController {
         UserDetailDTO detail = new UserDetailDTO();
         detail.setUser(mapperUtil.map(user, UserDTO.class));
 
-        // Get and map user roles
         List<RoleDTO> roles = urRepo.findActiveRolesByUserId(userId).stream()
                 .map(ur -> mapperUtil.map(ur.getRole(), RoleDTO.class))
                 .toList();

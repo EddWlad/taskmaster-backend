@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Repository
@@ -21,4 +22,10 @@ public interface IUserRepository extends IGenericRepository<User, UUID> {
 
     @Query("SELECT ur.user FROM UserRole ur WHERE ur.role.name = :roleName AND ur.user.status = 1 AND ur.status = 1")
     List<User> findUsersByRoleNameAndStatus(@Param("roleName") String roleName);
+
+    boolean existsByEmailAndIdUserNot(String email, UUID idUser);
+
+    Optional<User> findByEmail(String email);
+
+
 }

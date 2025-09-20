@@ -33,5 +33,24 @@ public interface IUserRoleRepository extends IGenericRepository<UserRole, UserRo
 
     @Query("SELECT ur FROM UserRole ur WHERE ur.user.idUser = :idUser AND ur.status = 1")
     List<UserRole> findActiveRolesByUserId(@Param("idUser") UUID idUser);
+    boolean existsByUser_IdUserAndRole_IdRole(UUID userId, UUID roleId);
+
+    @Query("""
+        select r.name
+        from UserRole ur
+        join ur.user u
+        join ur.role r
+        where u.email = :email
+    """)
+    List<String> findRoleNamesByUserEmail(@Param("email") String email);
+
+    @Query("""
+        select r.name
+        from UserRole ur
+        join ur.user u
+        join ur.role r
+        where u.idUser = :idUser
+    """)
+    List<String> findRoleNamesByUserId(@Param("idUser") UUID idUser);
 
 }
