@@ -6,7 +6,7 @@ Incluye: usuarios, tareas, relación Usuario↔Tareas, validaciones, manejo de e
 ---
 
 **Video instructivo**:  
-  Se incluye un video demostrativo donde se explica la ejecución del proyecto, el uso de los endpoints principales y la verificación de las semillas de usuarios/tareas, verificar el link para revision del video.  
+  Se incluye un video demostrativo donde se explica la ejecución del proyecto, el uso de los endpoints principales y la verificación de las semillas de usuarios/tareas, verificar el link para revision del video. https://drive.google.com/file/d/1KeNnszBxi71elMD1Lc4dNzDs-TH0oTkt/view?usp=sharing.   
 
 ## Requisitos
 
