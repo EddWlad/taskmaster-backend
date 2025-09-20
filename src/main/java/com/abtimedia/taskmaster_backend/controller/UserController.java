@@ -12,6 +12,7 @@ import com.abtimedia.taskmaster_backend.service.IUserService;
 import com.abtimedia.taskmaster_backend.util.MapperUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -27,12 +28,14 @@ public class UserController {
     private final MapperUtil mapperUtil;
     private final IUserRoleRepository urRepo;
 
+    @PreAuthorize("@authorizeLogic.hasAccess('findAll')")
     @GetMapping
     public ResponseEntity<List<UserDTO>> findAll() throws Exception {
         List<UserDTO> list = mapperUtil.mapList(userService.findAll(), UserDTO.class);
         return ResponseEntity.ok(list);
     }
 
+    @PreAuthorize("@authorizeLogic.hasAccess('findUserDetail')")
     @GetMapping("/{id}")
     public ResponseEntity<UserDetailDTO> findUserDetail(@PathVariable("id") String id) throws Exception{
         UUID userId = UUID.fromString(id);
@@ -49,6 +52,7 @@ public class UserController {
         return ResponseEntity.ok(detail);
     }
 
+    @PreAuthorize("@authorizeLogic.hasAccess('save')")
     @PostMapping
     public ResponseEntity<Void> save(@RequestBody UserListRoleDTO dto) throws Exception{
         User obj1 = mapperUtil.map(dto.getUser(), User.class);
@@ -64,6 +68,7 @@ public class UserController {
         return ResponseEntity.created(location).build();
     }
 
+    @PreAuthorize("@authorizeLogic.hasAccess('update')")
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> update(@PathVariable("id") String id, @RequestBody UserListRoleDTO dto) throws Exception{
         User user = mapperUtil.map(dto.getUser(), User.class);
@@ -74,20 +79,23 @@ public class UserController {
         return ResponseEntity.ok(mapperUtil.map(obj, UserDTO.class));
     }
 
+    @PreAuthorize("@authorizeLogic.hasAccess('delete')")
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) throws Exception{
         userService.softDeleteTransactional(UUID.fromString(id));
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("@authorizeLogic.hasAccess('findActiveAdmins')")
     @GetMapping("/admins")
-    public ResponseEntity<List<UserDTO>> findActiveLawyers() throws Exception {
+    public ResponseEntity<List<UserDTO>> findActiveAdmins() throws Exception {
         List<User> list = userService.findActiveUsersByRole("ADMINISTRADOR");
         return ResponseEntity.ok(mapperUtil.mapList(list, UserDTO.class));
     }
 
+    @PreAuthorize("@authorizeLogic.hasAccess('findActiveDevelopers')")
     @GetMapping("/developers")
-    public ResponseEntity<List<UserDTO>> findActiveClients() throws Exception {
+    public ResponseEntity<List<UserDTO>> findActiveDevelopers() throws Exception {
         List<User> list = userService.findActiveUsersByRole("DESARROLLADOR");
         return ResponseEntity.ok(mapperUtil.mapList(list, UserDTO.class));
     }

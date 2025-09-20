@@ -13,19 +13,20 @@ public class AuthorizeLogic {
         boolean result = false;
 
         String methodRole = switch (path){
-            case "findAll" -> "ADMINISTRADOR";
-            case "findById", "getById" -> "USER,DBA";
+            case "findAll", "findById", "save", "update", "delete",
+                 "findUserDetail", "findActiveAdmins", "findActiveDevelopers" -> "ROLE_ADMINISTRADOR";
+            case "findByUserTasks", "updateTask", "deleteTask" -> "ROLE_DESARROLLADOR,ROLE_ADMINISTRADOR";
             default -> "ROOT";
         };
 
         String methodRoles[] = methodRole.split(",");
 
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        log.info("Username is: " + auth.getName());
+        log.info("Email is: {}", auth.getName());
 
         for (GrantedAuthority ga : auth.getAuthorities()) {
             String roleUser = ga.getAuthority();
-            log.info("Role is: " + roleUser);
+            log.info("Role is: {}", roleUser);
 
             for(String role : methodRoles){
                 if(roleUser.equalsIgnoreCase(role)){
@@ -34,8 +35,6 @@ public class AuthorizeLogic {
                 }
             }
         }
-
-
         return result;
     }
 }

@@ -18,7 +18,8 @@ import java.util.stream.Collectors;
 @Component
 public class JwtTokenUtil {
 
-    private final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000;//5 horas;
+    //private final long JWT_TOKEN_VALIDITY = 5 * 60 * 60 * 1000;
+    private final long JWT_TOKEN_VALIDITY = 5 * 60 * 1000;
 
     @Value("${jwt.secret}")
     private String secret;

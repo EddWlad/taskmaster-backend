@@ -8,6 +8,7 @@ import com.abtimedia.taskmaster_backend.repository.IUserRepository;
 import com.abtimedia.taskmaster_backend.repository.IUserRoleRepository;
 import com.abtimedia.taskmaster_backend.service.IUserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -22,6 +23,7 @@ public class UserServiceImpl extends GenericServiceImpl<User, UUID> implements I
 
     private final IUserRepository userRepository;
     private final IUserRoleRepository urRepo;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Override
@@ -51,10 +53,15 @@ public class UserServiceImpl extends GenericServiceImpl<User, UUID> implements I
                 existingUser.setFullName(user.getFullName());
                 existingUser.setEmail(user.getEmail());
                 existingUser.setDateCreate(LocalDateTime.now());
-                existingUser.setPassword(user.getPassword());
+                if (user.getPassword() != null && !user.getPassword().isBlank()) {
+                    if (user.getPassword().startsWith("$2a$") || user.getPassword().startsWith("$2b$") || user.getPassword().startsWith("$2y$")) {
+                        existingUser.setPassword(user.getPassword());
+                    } else {
+                        existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+                    }
+                }
                 userRepository.save(existingUser);
 
-                // Clear and reassign roles
                 urRepo.deleteByUserId(existingUser.getIdUser());
                 roles.forEach(role -> urRepo.saveRole(existingUser.getIdUser(), role.getIdRole()));
 
@@ -63,7 +70,12 @@ public class UserServiceImpl extends GenericServiceImpl<User, UUID> implements I
                 throw new RuntimeException("A user with this identification already exists");
             }
         }
-        // Create new user
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            if (user.getPassword().startsWith("$2a$") || user.getPassword().startsWith("$2b$") || user.getPassword().startsWith("$2y$")) {
+            } else {
+                user.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        }
         userRepository.save(user);
         roles.forEach(role -> urRepo.saveRole(user.getIdUser(), role.getIdRole()));
 
@@ -81,15 +93,19 @@ public class UserServiceImpl extends GenericServiceImpl<User, UUID> implements I
             throw new RuntimeException("The user was logically deleted. Cannot update.");
         }
 
-        // Update basic data
         existingUser.setFullName(user.getFullName());
         existingUser.setEmail(user.getEmail());
-        existingUser.setPassword(user.getPassword());
+        if (user.getPassword() != null && !user.getPassword().isBlank()) {
+            if (user.getPassword().startsWith("$2a$") || user.getPassword().startsWith("$2b$") || user.getPassword().startsWith("$2y$")) {
+                existingUser.setPassword(user.getPassword());
+            } else {
+                existingUser.setPassword(passwordEncoder.encode(user.getPassword()));
+            }
+        }
         existingUser.setStatus(user.getStatus());
 
         userRepository.save(existingUser);
 
-        // Clear and reassign roles
         urRepo.softDeleteByUserId(id);
         roles.forEach(role -> urRepo.saveRole(id, role.getIdRole()));
 
@@ -113,11 +129,9 @@ public class UserServiceImpl extends GenericServiceImpl<User, UUID> implements I
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("ID NOT FOUND " + id));
 
-        // Soft delete the user
         user.setStatus(0);
         userRepository.save(user);
 
-        // Soft delete the roles associated with the user
         urRepo.softDeleteByUserId(id);
 
         return true;

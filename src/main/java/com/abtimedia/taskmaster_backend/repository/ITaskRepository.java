@@ -12,5 +12,6 @@ import java.util.UUID;
 @Repository
 public interface ITaskRepository extends IGenericRepository<Task, UUID> {
     List<Task> findByUserIdUserAndStatusNot(UUID idUser, Integer status);
+    Optional<Task> findByIdTaskAndStatusNot(UUID idTask, Integer status);
 
 }

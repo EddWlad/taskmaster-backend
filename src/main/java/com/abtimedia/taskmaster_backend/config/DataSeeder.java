@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
@@ -23,6 +24,7 @@ public class DataSeeder {
     private final IRoleRepository roleRepository;
     private final IUserRepository userRepository;
     private final IUserRoleRepository userRoleRepository;
+    private final PasswordEncoder passwordEncoder;
 
 
     @Value("${app.seed.enabled:true}")
@@ -68,7 +70,12 @@ public class DataSeeder {
         User u = new User();
         u.setFullName(fullName);
         u.setEmail(email);
-        u.setPassword(rawPassword);
+        if (rawPassword != null && !rawPassword.isBlank()
+                && !(rawPassword.startsWith("$2a$") || rawPassword.startsWith("$2b$") || rawPassword.startsWith("$2y$"))) {
+            u.setPassword(passwordEncoder.encode(rawPassword));
+        } else {
+            u.setPassword(rawPassword);
+        }
         u.setStatus(1);
         return userRepository.save(u);
     }

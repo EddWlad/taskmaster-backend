@@ -27,12 +27,13 @@ public class Task {
     private UUID idTask;
 
     @CreationTimestamp
+    @Column(name = "task_date_create", updatable = false)
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime taskDateCreate = LocalDateTime.now();
+    private LocalDateTime taskDateCreate;
 
     @UpdateTimestamp
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
-    private LocalDateTime taskDateUpdate = LocalDateTime.now();
+    private LocalDateTime taskDateUpdate;
 
     @Column(nullable = false, length = 120)
     private String taskTitle;

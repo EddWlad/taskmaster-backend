@@ -44,7 +44,7 @@ public class LoginController {
                     .secure(false)
                     .path("/")
                     .sameSite("Strict")
-                    .maxAge(Duration.ofHours(5))
+                    .maxAge(Duration.ofMinutes(5))
                     .build();
             response.setHeader(HttpHeaders.SET_COOKIE, cookie.toString());
             return ResponseEntity.ok(true);
