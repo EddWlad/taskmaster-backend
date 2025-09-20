@@ -5,6 +5,9 @@ Incluye: usuarios, tareas, relación Usuario↔Tareas, validaciones, manejo de e
 
 ---
 
+**Video instructivo**:  
+  Se incluye un video demostrativo donde se explica la ejecución del proyecto, el uso de los endpoints principales y la verificación de las semillas de usuarios/tareas, verificar el link para revision del video.  
+
 ## Requisitos
 
 - Java 21
@@ -157,6 +160,17 @@ Pruebas incluidas:
 - **Arquitectura limpia**: capas `controller`, `service`, `repository`, `entity`, `dto`, `exception`.
 
 ---
+
+## Colección Postman
+
+Se incluye la colección **TaskMaster-API** para probar los endpoints.  
+Archivo: `TaskMaster-API.postman_collection.json`
+
+Importar en Postman:
+
+1. Abrir Postman → **Import**.
+2. Seleccionar el archivo `.json` de la colección.
+3. Ejecutar las requests: `User`, `Role`, `Task`, `Login`.
 
 ## Entregables solicitados
 
