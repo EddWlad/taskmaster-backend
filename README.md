@@ -82,13 +82,13 @@ Semillas creadas:
 
 ### Opción B — Con Docker Compose (recomendado)
 
-1. Crea el archivo `.env` con las variables anteriores.
+1. Crea el archivo `.env` con las variables anteriores. (Paso no necesario puesto que ya se encuentra subido el .env solo verificarlo
 2. Levanta la base de datos:
 
    ```bash
    docker compose up -d
    ```
-
+Esto si es pr consola o directamente play desde cual IDE
 3. Arranca el backend:
 
    ```bash
