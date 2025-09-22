@@ -82,13 +82,13 @@ Semillas creadas:
 
 ### Opción B — Con Docker Compose (recomendado)
 
-1. Crea el archivo `.env` con las variables anteriores. (Paso no necesario puesto que ya se encuentra subido el .env solo verificarlo
+1. Crea el archivo `.env` con las variables anteriores. (Paso no necesario puesto que ya se encuentra subido el .env solo verificarlo)
 2. Levanta la base de datos:
 
    ```bash
    docker compose up -d
    ```
-Esto si es pr consola o directamente play desde cual IDE
+Esto si es por consola o directamente play desde cualquier IDE
 3. Arranca el backend:
 
    ```bash
@@ -104,23 +104,23 @@ Esto si es pr consola o directamente play desde cual IDE
 
 ### Usuarios
 
-- `POST /users` → crear usuario con roles
-- `GET /users/{id}`, `PUT /users/{id}`, `DELETE /users/{id}`
-- `GET /users/admins`
-- `GET /users/developers`
+- `POST /users` → crear usuario con roles (administrador)
+- `GET /users/{id}`, `PUT /users/{id}`, `DELETE /users/{id}` → (administrador)
+- `GET /users/admins` → (administrador)
+- `GET /users/developers` → (administrador)
 
 ### Tareas
 
-- `POST /task` → crear tarea
-- `GET /task` → listar todas (según permisos)
-- `GET /task/{id}` → detalle
-- `GET /task/user/{idUser}` → listar por usuario
-- `PUT /task/{id}` → actualizar
-- `DELETE /task/{id}` → eliminación lógica
+- `POST /task` → crear tarea (administrador)
+- `GET /task` → listar todas (según permisos) (administrador)
+- `GET /task/{id}` → detalle (administrador)
+- `GET /task/user/{idUser}` → listar por usuario (administrador - desarrollador)
+- `PUT /task/{id}` → actualizar (administrador - desarrollador)
+- `DELETE /task/{id}` → eliminación lógica (administrador - desarrollador)
 
 ### Auth (plus)
 
-- `POST /login` → autentica usuario y devuelve JWT
+- `POST /login` → autentica usuario y devuelve JWT (true o false) que se propaga mediante las cookies por los endpoint con autorizacion
 
 ---
 
@@ -182,6 +182,6 @@ Importar en Postman:
 - ✅ Manejo de errores
 - ✅ README.md
 - ✅ Pruebas unitarias
-- ✅ Colección Postman (se recomienda exportar y añadir al repo)
+- ✅ Colección Postman
 - ✅ Docker Compose opcional
 - ✅ Plus: Login y JWT
